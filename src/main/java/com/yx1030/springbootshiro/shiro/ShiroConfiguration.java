@@ -41,13 +41,12 @@ public class ShiroConfiguration {
         System.out.println("=============shiro配置类==============");
         System.out.println("ShiroConfiguration.shirFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean  = new ShiroFilterFactoryBean();
-
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        shiroFilterFactoryBean.setLoginUrl("");
+        // 自定义登录页面
+        shiroFilterFactoryBean.setLoginUrl("login.html");
         // 登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("");
+        shiroFilterFactoryBean.setSuccessUrl("index.html");
         //未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("");
         //拦截器.
@@ -55,11 +54,13 @@ public class ShiroConfiguration {
         //自定义拦截器
         Map<String, Filter> customisedFilter = new HashMap<>();
         customisedFilter.put("url", getURLPathMatchingFilter());
-
         //配置映射关系
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/login.html", "anon");
+        filterChainDefinitionMap.put("/index.html", "anon");
         filterChainDefinitionMap.put("/index", "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
+        filterChainDefinitionMap.put("/static/img/**", "anon");
         filterChainDefinitionMap.put("/config/**", "anon");
         filterChainDefinitionMap.put("/doLogout", "logout");;
         filterChainDefinitionMap.put("/**", "url");
