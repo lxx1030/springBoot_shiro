@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/ajaxFileUpload.js"></script>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'west',title:'West',split:true" style="width:180px;">
+    <ul id="tt" class="easyui-tree">
+        <li>
+            <span>学籍系统</span>
+            <ul>
+                <li>
+                    <span>学籍管理</span>
+                    <ul>
+                        <li data-options="attributes:{'url':'student'}"><span>学生列表</span></li>
+                        <li><span>File 12</span></li>
+                        <li><span>File 13</span></li>
+                    </ul>
+                </li>
+                <li><span>File 2</span></li>
+                <li><span>File 3</span></li>
+            </ul>
+        </li>
+        <li><span>File21</span></li>
+    </ul>
+</div>
+<div data-options="region:'center',title:''" style="padding:5px;background:#eee;">
+    <div id="tabs" class="easyui-tabs">
+        <div title="首页" style="padding:20px;display:none;">
+            tab1
+        </div>
+
+    </div>
+</div>
+<script>
+    $('#tt').tree({
+        onClick: function(node){
+            //alert(node.text);  // 单击时提醒节点名称
+            var tabs = $("#tabs");
+            var tab = tabs.tabs("getTab",node.text);
+            if(tab){
+                tabs.tabs("select",node.text)
+            }else {
+                tabs.tabs('add',{
+                    title:node.text,
+                    //content:'Tab Body',
+                    href:node.attributes.url,
+                    closable:true,
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>

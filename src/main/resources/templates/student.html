@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>品牌列表</title>
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/ajaxFileUpload.js"></script>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'center',title:'品牌列表'">
+    <table id="dg" class="easyui-datagrid" style="width:100%;height:auto;">
+        <thead>
+        <tr>
+            <th field="ck" checkbox="true"></th>
+            <th field="id" width="100">ID</th>
+            <th field="name" width="100">姓名</th>
+            <th field="password" width="100">密码</th>
+            <th field="salt" width="100">盐值</th>
+        </tr>
+        </thead>
+    </table>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addBrand()">新建</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editBrand()">修改</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyBrand()">删除</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="updateDelete()">移除</a>
+        <a href="/writeExcel" class="easyui-linkbutton" data-options="iconCls:'icon-print'" >导出</a>
+        <div style="float:right;">
+           <!-- 品牌名称:<input id="brandName" class="easyui-searchbox"  data-options="prompt:'品牌名称',searcher:''" style="width:130px;vertical-align:middle;">- -->
+            班级:<input id="studentClazz" class="easyui-combobox" style="width:100px"
+                   url="findClazz"
+                   valueField="bid" textField="bname"  data-options="prompt:'所有'">
+            关键字:<input id="idName" class="easyui-searchbox"  data-options="prompt:'学号/姓名',searcher:''" style="width:130px;vertical-align:middle;">
+            <a href="javascript:void(0)"  class="easyui-linkbutton" plain="true" onclick="doSearch()">高级检索</a>
+
+        </div>
+
+    </div>
+   <!-- //新建页面-->
+    <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <h3>学生添加</h3>
+            <input type="hidden" name="remarks">
+
+            <div style="margin-bottom:10px">
+                <input id="sector" name="sector" class="easyui-datebox" label="界别:" data-options="formatter:myformatter,parser:myparser"style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="" class="easyui-combobox" name="bid" style="width:100%" label="班级:"
+                       url="findClazz"
+                       valueField="bid" textField="bname"  data-options="prompt:'请选择班级'">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="sid" class="easyui-textbox"  label="学生编号:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="name" class="easyui-textbox"  label="姓名:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input  name="birthday" class="easyui-datebox"  label="出生年月:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <span>性别</span>
+                <input class="easyui-radiobutton" name="sex" value="男">男
+                <input class="easyui-radiobutton" name="sex" value="女">女
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="meizu" class="easyui-textbox"  label="民族:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="status" class="easyui-textbox"  label="状态:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="phone" class="easyui-textbox"  label="手机号码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="entrydate" name="entrydate" class="easyui-datebox"  label="报名日期:" data-options="formatter:bformatter,parser:bparser" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+               <!-- <input id="fb" class="easyui-filebox" name="uploadfile" style="width:100%" label="图片">-->
+                <input id="fb" type="text" name="uploadfile" style="width:100px">
+                <a id="bit"  class="easyui-linkbutton" onclick="uploadfile()" >上传头像</a>
+                <img src="" id="img"width="100px" height="100px">
+                <!--<input name="remarks" class="easyui-textbox"  label="备注:" style="width:100%">-->
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveBrand()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script>
+    //获取图片
+    function showImage(val,row,index){
+        if (row.remarks){
+            return '<img style="height: 100px" src="'+"http://yx1030.com:8888/"+row.remarks+'"/>';
+        }
+    }
+    //初始化uploadPic
+    function uploadfile(){
+        $.ajaxFileUpload({
+            url:'/uploadfile',
+            fileElementId:'filebox_file_id_1',
+            type:"post",
+            success:function (data) {
+                alert("图片上传成功")
+               console.log($(data).find("body").text())
+                $("#img").attr("src","http://yx1030.com:8888/"+$(data).find("body").text());
+            $("#fm").find("input[name='remarks']").val($(data).find("body").text());
+            }
+        })
+
+    }
+    //初始化filebox
+    $('#fb').filebox({
+        buttonText: '浏览',
+        buttonAlign: 'right'
+    })
+
+    //出生年月处理
+    function bformatter(date){
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        var d = date.getDate();
+        return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+    }
+
+    function bparser(s){
+        if (!s) return new Date();
+        var ss = (s.split('-'));
+        var y = parseInt(ss[0],10);
+        var m = parseInt(ss[1],10);
+        var d = parseInt(ss[2],10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+            return new Date(y,m-1,d);
+        } else {
+            return new Date();
+        }
+    }
+
+
+    //界别处理
+    function myformatter(date){
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        var d = date.getDate();
+        return y+""+(m<10?('0'+m):m);
+    }
+
+    function myparser(s){
+
+        if (!s) return new Date();
+        var ss = (s.split('-'));
+        var y = parseInt(ss[0],10);
+        var m = parseInt(ss[1],10);
+        var d = parseInt(ss[2],10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+            return new Date(y,m-1,d);
+        } else {
+            return new Date();
+        }
+    }
+
+
+    //自动发请求到url，并把返回的数据自动填入
+    $('#dg').datagrid({
+        url: 'user/list',
+        dataType:'JSONP',
+        toolbar:'#toolbar',
+        rownumbers: false,
+        singleSelect: false,
+        pagination:true,
+        idField: 'id',
+        fitColumns: true,
+        fit: true,
+        nowarp: false,
+        border: false,
+        pageSize: 10,
+        pageList: [10,20,30],
+    });
+    //添加模态框
+    var url="";
+    function addBrand(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','添加');
+        $('#fm').form('clear');
+        url = 'addto';
+        //页面加载
+        $(function(){
+            //设置时间
+            var curr_time = new Date();
+            $("#sector").datebox("setValue",myformatter(curr_time));
+            $("#entrydate").datebox("setValue",bformatter(curr_time));
+
+            //获取时间
+            var sector=$("#sector").datebox("getValue");
+            var sector=$("#entrydate").datebox("getValue");
+
+        });
+    }
+    //添加方法
+    function saveBrand(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                alert(result)
+                if (result.success){
+                    $.messager.show({
+                        title: 'Success',
+                        msg: result.message
+                    });
+                    $('#dlg').dialog('close');  // 关闭添加框
+                    $('#dg').datagrid('reload'); // 刷新页面
+                } else{
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.message
+                    });
+                }
+            }
+        });
+    }
+    //删除Result deleteBrand(@RequestParam(required = false, value = "ids[]") int[] ids)
+    function destroyBrand(){
+        var row = $('#dg').datagrid('getSelections');
+        var ids=[];
+        for(var i in row){
+           ids.push(row[i].id)
+        }
+        console.log(ids)
+        if (row){
+            $.messager.confirm('提示信息','确定删除吗?',function(r){
+                if (r){
+                    $.post('deleteBrand',{'ids[]':ids},function(result){
+                        if (result.success){
+                            $('#dg').datagrid('reload');    // reload the user data
+                        } else {
+                            $.messager.show({    // show error message
+                                title: 'Error',
+                                msg: result.message
+                            });
+                        }
+                    },'json');
+                }
+            });
+        }
+    }
+    //假删除
+    function updateDelete(){
+        var row = $('#dg').datagrid('getSelected');
+        console.log(row.id)
+        console.log(row.deletesta)
+        $.post("updateDelete",
+            {"id":row.id,"deletesta":row.deletesta},
+            function (result) {
+                if (result.success){
+                    $('#dg').datagrid('reload');    // reload the user data
+                } else {
+                    $.messager.show({    // show error message
+                        title: 'Error',
+                        msg: result.message
+                    });
+                }
+            },"json")
+    }
+    //修改
+    function editBrand(){
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle','修改');
+            $('#fm').form('load',row);
+            url = 'updateBrand?id='+row.id;
+        }
+    }
+
+    /*查询*/
+    function doSearch(){
+
+        $('#dg').datagrid('load',{
+            name: $('#brandName').val(),
+            firstChar: $('#brandFirstChar').val(),
+            bid: $('#studentClazz').val(),
+            idName: $('#idName').val(),
+
+        });
+       /* 打印下拉框值*/
+        console.log($('#studentClazz').val())
+        console.log($('#idName').val())
+    }
+    //操作
+        function formatOper(val,row,index){
+            return '<a href="'+row["id"]+'">修改</a>';
+        }
+</script>
+</body>
+</html>
