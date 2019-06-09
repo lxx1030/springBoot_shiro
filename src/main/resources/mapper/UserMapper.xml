@@ -79,4 +79,7 @@
       salt = #{salt,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectUserList" resultMap="BaseResultMap">
+    select * from user
+  </select>
 </mapper>
