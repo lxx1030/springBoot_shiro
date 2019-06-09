@@ -6,18 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class PageController {
-    /**
-     * @Description: 跳转到登录页面
-     * @Param: [mav]
-     * @Return org.springframework.web.servlet.ModelAndView
-     * @Author: Liu.Sx
-     * @Create: 2019/6/9
-     **/
-    @RequestMapping("/")
-    public ModelAndView login(ModelAndView mav) {
-        mav.setViewName("login");
-        return mav;
-    }
+
     /**
      * @Description: 跳转到index.html页面
      * @Param: [mav]
@@ -25,7 +14,7 @@ public class PageController {
      * @Author: Liu.Sx
      * @Create: 2019/6/9
      **/
-    @RequestMapping("/index")
+    @RequestMapping(value = "/index")
     public ModelAndView index(ModelAndView mav) {
         mav.setViewName("index");
         return mav;

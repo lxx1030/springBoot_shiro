@@ -82,4 +82,7 @@
   <select id="selectUserList" resultMap="BaseResultMap">
     select * from user
   </select>
+    <select id="selectByUserName" resultMap="BaseResultMap">
+      select * from user where name=#{username,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -25,4 +25,9 @@ private UserMapper userMapper;
         result.setRows(pageInfo.getList());
         return result;
     }
+
+    @Override
+    public User selectByUserName(String username) {
+        return userMapper.selectByUserName(username);
+    }
 }

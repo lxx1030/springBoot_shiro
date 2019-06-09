@@ -27,5 +27,13 @@ public interface UserMapper {
      * @Create: 2019/6/9
      **/
     List<User> selectUserList(@Param("user") User user);
+    /**
+    * @Description: 通过用户名查修一条user数据 进行密码验证
+    * @Param: [username]
+    * @Return com.yx1030.springbootshiro.pojo.User
+    * @Author: Liu.Sx
+    * @Create: 2019/6/9
+    **/
+    User selectByUserName(String username);
 
 }
